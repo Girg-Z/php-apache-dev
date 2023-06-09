@@ -22,9 +22,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           file: ${{ matrix.version }}/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/php-apache-dev:${{ matrix.version }}
