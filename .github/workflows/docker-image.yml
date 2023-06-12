@@ -29,3 +29,35 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/php-apache-dev:${{ matrix.version }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  build-native:
+    strategy:
+      matrix:
+        version: ['7.4-native', '8.0-native', '8.1-native', '8.2-native']
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          file: ${{ matrix.version }}/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/php-apache-dev:${{ matrix.version }}
+          labels: ${{ steps.meta.outputs.labels }}
