@@ -9,7 +9,7 @@ ENV XDEBUG_IDEKEY docker
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions xdebug-^3 bcmath gd intl pdo_mysql soap xsl zip mysqli redis sockets @composer-2
+    install-php-extensions xdebug-^3.1 bcmath gd intl pdo_mysql soap xsl zip mysqli redis sockets @composer-2
 
 RUN a2enmod rewrite
 
