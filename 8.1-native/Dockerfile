@@ -30,4 +30,6 @@ RUN apt-get update && apt-get install -y \
     htop \
     && rm -rf /var/lib/apt/lists/*
 
+RUN useradd -u 1000 application
+WORKDIR /app
 USER 1000
