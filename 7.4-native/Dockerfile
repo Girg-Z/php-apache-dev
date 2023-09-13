@@ -27,6 +27,7 @@ RUN chmod 755 /usr/local/bin/debug
 
 RUN apt-get update && apt-get install -y \
     vim \
+    git \
     htop \
     && rm -rf /var/lib/apt/lists/*
 
