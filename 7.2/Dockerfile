@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:7.2-apache
 
 ENV WEB_DOCUMENT_ROOT /app
 ENV APACHE_DOCUMENT_ROOT /app
@@ -6,10 +6,11 @@ ENV php.realpath_cache_size 10M
 ENV php.realpath_cache_ttl 7200
 ENV XDEBUG_CLIENT_HOST 127.0.0.1
 ENV XDEBUG_IDEKEY docker
+ENV COMPOSER_CACHE_DIR /dev/null
 
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions xdebug-^3 bcmath gd intl pdo_mysql soap xsl zip mysqli redis sockets @composer-2
+    install-php-extensions xdebug-^3.1 bcmath gd intl pdo_mysql soap xsl zip mysqli redis sockets @composer-2
 
 RUN a2enmod rewrite
 
