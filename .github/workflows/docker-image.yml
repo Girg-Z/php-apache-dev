@@ -3,15 +3,13 @@ name: Docker Image CI
 on:
   push:
     branches: [ "master" ]
-  schedule:
-    - cron: '0 0 * * 1'
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        version: ['7.2', '7.4', '8.0', '8.1', '8.2', '8.3']
+        version: ['7.2', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
     runs-on: ubuntu-latest
 
     steps:
