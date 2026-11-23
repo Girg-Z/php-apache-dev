@@ -18,7 +18,9 @@ RUN chmod +x /usr/local/bin/install-php-extensions && \
     # Xdebug is loaded on demand by the entrypoint (see XDEBUG_MODE)
     rm "$PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini"
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite && \
+    echo "ServerName localhost" > /etc/apache2/conf-available/servername.conf && \
+    a2enconf servername
 
 RUN sed -ri -e 's!/var/www/html!${WEB_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
