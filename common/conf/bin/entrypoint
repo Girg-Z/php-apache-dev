@@ -1,0 +1,16 @@
+#!/bin/sh
+set -e
+
+# Load Xdebug only when XDEBUG_MODE asks for something
+loader="$PHP_INI_DIR/conf.d/zz-xdebug-load.ini"
+case "${XDEBUG_MODE:-off}" in
+    off)
+        rm -f "$loader"
+        ;;
+    *)
+        echo "zend_extension=xdebug" > "$loader"
+        mkdir -p "$XDEBUG_OUTPUT_DIR"
+        ;;
+esac
+
+exec docker-php-entrypoint "$@"

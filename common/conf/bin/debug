@@ -1,12 +1,35 @@
 #!/bin/bash
 
-if [ -n "$1" ] && [ $1 = "php" ]; then
-        shift
+usage() {
+    cat <<USAGE
+Usage: debug [php] <script.php> [args...]
+       debug [php] -r '<code>'
+
+Runs a PHP CLI command with an Xdebug debug session started immediately,
+connecting to \$XDEBUG_CLIENT_HOST (currently: ${XDEBUG_CLIENT_HOST}).
+Works even when XDEBUG_MODE is not set.
+
+Examples:
+  debug script.php
+  debug php bin/console app:import --force
+USAGE
+}
+
+if [ "$1" = "php" ]; then
+    shift
 fi
 
-if [ $# -lt 1 ]; then
-        # TODO print usage
-        exit 1
+if [ $# -lt 1 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    usage
+    exit 1
 fi
 
-php -d xdebug.start_with_request=yes "$@"
+args=(-d xdebug.start_with_request=yes)
+
+# Xdebug is not loaded by default: load it just for this run
+if ! php -r 'exit(extension_loaded("xdebug") ? 0 : 1);'; then
+    args+=(-d zend_extension=xdebug)
+fi
+
+# XDEBUG_MODE in the environment wins over -d xdebug.mode
+XDEBUG_MODE=debug exec php "${args[@]}" "$@"
